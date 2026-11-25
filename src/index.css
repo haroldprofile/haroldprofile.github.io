@@ -1761,3 +1761,288 @@ button {
     display: none;
   }
 }
+
+/* ============ DEV-VIBE LAYER: IDE / terminal-native ============ */
+
+/* CRT scanlines + slow sweep (decorative, non-interactive) */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  pointer-events: none;
+  background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 2px, rgba(2, 6, 23, 0.16) 3px);
+  opacity: 0.55;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: -20vh;
+  height: 18vh;
+  z-index: 998;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent, rgba(16, 185, 129, 0.05), transparent);
+  animation: crt-sweep 9s linear infinite;
+}
+
+@keyframes crt-sweep {
+  to {
+    transform: translateY(140vh);
+  }
+}
+
+/* Hero code rain */
+.matrix-rain {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0.22;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, #000 40%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 40%, transparent 100%);
+}
+
+/* Typed hero command */
+.hero-cmd {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 14px;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+}
+
+.hero-cmd-prompt {
+  color: var(--accent-emerald);
+  white-space: nowrap;
+}
+
+.hero-cmd-typed {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 0;
+  border-right: 2px solid var(--accent-cyan);
+  color: var(--text-primary);
+  animation:
+    type-cmd 1.6s steps(26, end) 0.3s forwards,
+    caret 0.9s steps(2, start) infinite;
+}
+
+@keyframes type-cmd {
+  to {
+    width: 26ch;
+  }
+}
+
+@keyframes caret {
+  50% {
+    border-color: transparent;
+  }
+}
+
+/* Glitch accent on hero keyword */
+.kinetic-gradient {
+  position: relative;
+  white-space: nowrap;
+}
+
+.kinetic-gradient::before,
+.kinetic-gradient::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  -webkit-text-fill-color: currentColor;
+  pointer-events: none;
+}
+
+.kinetic-gradient::before {
+  color: #06B6D4;
+  clip-path: inset(0 0 55% 0);
+  animation: glitch-a 7s steps(1, end) infinite;
+}
+
+.kinetic-gradient::after {
+  color: #F472B6;
+  clip-path: inset(55% 0 0 0);
+  animation: glitch-b 7s steps(1, end) infinite;
+}
+
+@keyframes glitch-a {
+  0%,
+  91%,
+  100% {
+    opacity: 0;
+    transform: translate(0);
+  }
+  92% {
+    opacity: 0.9;
+    transform: translate(-3px, 1px);
+  }
+  94% {
+    opacity: 0.9;
+    transform: translate(2px, -1px);
+  }
+  96% {
+    opacity: 0;
+  }
+}
+
+@keyframes glitch-b {
+  0%,
+  92%,
+  100% {
+    opacity: 0;
+    transform: translate(0);
+  }
+  93% {
+    opacity: 0.9;
+    transform: translate(3px, -1px);
+  }
+  95% {
+    opacity: 0.9;
+    transform: translate(-2px, 1px);
+  }
+  97% {
+    opacity: 0;
+  }
+}
+
+.kinetic-gradient:hover::before,
+.kinetic-gradient:hover::after {
+  opacity: 0.85;
+}
+
+/* Section headers read like code comments */
+.section-subtitle::before {
+  content: '// ';
+  color: var(--accent-emerald);
+  font-family: var(--font-mono);
+}
+
+.section-title::before {
+  content: 'export const ';
+  color: #A78BFA;
+  font-family: var(--font-mono);
+  font-size: 0.55em;
+  font-weight: 500;
+  letter-spacing: 0;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+/* Line-numbered code gutter on highlight lists */
+.project-highlights {
+  counter-reset: ln;
+  border-left: 1px solid var(--border);
+  padding-left: 0;
+  gap: 8px;
+}
+
+.project-highlight-item {
+  counter-increment: ln;
+  align-items: flex-start;
+}
+
+.project-highlight-item::before {
+  content: counter(ln, decimal-leading-zero);
+  flex-shrink: 0;
+  width: 34px;
+  padding-top: 2px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: #8494AB;
+  border-right: 1px solid var(--border);
+  margin-right: 2px;
+}
+
+.project-highlight-item .highlight-icon {
+  display: none;
+}
+
+/* Syntax-highlight colors on tech tags */
+.tech-tag:nth-child(3n + 1) {
+  color: var(--accent-cyan);
+}
+
+.tech-tag:nth-child(3n + 2) {
+  color: #A78BFA;
+}
+
+.tech-tag:nth-child(3n) {
+  color: #86EFAC;
+}
+
+/* Git-log style resume timeline */
+.commit-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 8px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.commit-hash {
+  color: #FBBF24;
+}
+
+.commit-head {
+  padding: 1px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border-accent);
+  background: rgba(16, 185, 129, 0.14);
+  color: var(--accent-emerald);
+  font-weight: 600;
+}
+
+.timeline-card::before {
+  border-radius: 3px;
+  transform: rotate(45deg);
+}
+
+/* Terminal-style corner tick on cards */
+.spotlight-card::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 10px;
+  height: 10px;
+  border-top: 2px solid rgba(16, 185, 129, 0.5);
+  border-right: 2px solid rgba(16, 185, 129, 0.5);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.card-gold.spotlight-card::before {
+  border-color: rgba(212, 175, 55, 0.6);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before,
+  .matrix-rain {
+    display: none;
+  }
+
+  .hero-cmd-typed {
+    width: 26ch;
+    border-right-color: transparent;
+    animation: none;
+  }
+
+  .kinetic-gradient::before,
+  .kinetic-gradient::after {
+    display: none;
+  }
+}

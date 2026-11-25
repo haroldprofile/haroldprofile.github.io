@@ -26,6 +26,7 @@ import {
   Youtube,
 } from 'lucide-react';
 import { EnterpriseSystemCard } from './components/EnterpriseSystemCard';
+import { MatrixRain } from './components/MatrixRain';
 import { ProfileAvatar } from './components/ProfileAvatar';
 import { ProjectCard } from './components/ProjectCard';
 import { TechMarquee } from './components/TechMarquee';
@@ -48,6 +49,13 @@ import {
 import { handleCardPointerMove } from './utils/spotlight';
 
 const SECTION_IDS = ['projects', 'ai-stack', 'resume', 'passion', 'contact'];
+
+/** Deterministic fake short commit hash for the git-log style timeline (decorative). */
+const commitHash = (s: string) => {
+  let h = 7;
+  for (const c of s) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  return h.toString(16).padStart(8, '0').slice(0, 7);
+};
 
 function renderSocialIcon(id: SocialLink['id']) {
   switch (id) {
@@ -278,6 +286,7 @@ export function App() {
       <main id="main">
         {/* Hero */}
         <section id="top" className="hero">
+          <MatrixRain />
           <div className="container hero-grid">
             <div>
               <div className="hero-meta-row hero-enter">
@@ -291,6 +300,11 @@ export function App() {
                 </span>
               </div>
 
+              <p className="hero-cmd" aria-hidden="true">
+                <span className="hero-cmd-prompt">harold@dev:~$</span>
+                <span className="hero-cmd-typed">npm run build --portfolio</span>
+              </p>
+
               <p className="hero-eyebrow hero-enter hero-enter-delay-1">
                 {PROFILE.name} — {PROFILE.role}
                 <span className="cursor-blink" aria-hidden="true">_</span>
@@ -298,7 +312,9 @@ export function App() {
 
               <h1 className="hero-title hero-enter hero-enter-delay-1">
                 {PROFILE.headlinePrefix}{' '}
-                <span className="kinetic-gradient">{PROFILE.headlineAccent}</span>{' '}
+                <span className="kinetic-gradient" data-text={PROFILE.headlineAccent}>
+                  {PROFILE.headlineAccent}
+                </span>{' '}
                 {PROFILE.headlineSuffix}
               </h1>
 
@@ -482,6 +498,10 @@ export function App() {
                     style={{ '--stagger-index': index } as CSSProperties}
                     onPointerMove={handleCardPointerMove}
                   >
+                    <p className="commit-line" aria-hidden="true">
+                      <span className="commit-hash">commit {commitHash(item.id)}</span>
+                      {item.current && <span className="commit-head">HEAD → main</span>}
+                    </p>
                     <div className="timeline-header">
                       <div>
                         <h4 className="timeline-role">{item.role}</h4>
