@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState, type CSSProperties } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { motion } from 'motion/react';
 import {
   ArrowRight,
   Bot,
@@ -42,11 +43,14 @@ import {
   PASSION_SHOWCASE,
   PROFILE,
   SKILL_CATEGORIES,
+  STATS,
   SOCIALS,
   type EnterpriseCategory,
   type SocialLink,
 } from './data/portfolio';
 import { handleCardPointerMove } from './utils/spotlight';
+import { CountUp } from './components/CountUp';
+import { ITEM, REVEAL, VIEWPORT } from './motion';
 
 const SECTION_IDS = ['projects', 'ai-stack', 'resume', 'passion', 'contact'];
 
@@ -162,31 +166,6 @@ export function App() {
     );
 
     sectionElements.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const elements = document.querySelectorAll<HTMLElement>('.reveal');
-
-    if (prefersReducedMotion || typeof IntersectionObserver === 'undefined') {
-      elements.forEach((el) => el.classList.add('is-visible'));
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.08 },
-    );
-
-    elements.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
 
@@ -320,13 +299,16 @@ export function App() {
 
               <p className="hero-summary hero-enter hero-enter-delay-2">{PROFILE.summary}</p>
 
-              <div className="hero-metrics hero-enter hero-enter-delay-2" aria-label="Key engineering highlights">
-                {PROFILE.metrics.map((metric) => (
-                  <span key={metric} className="metric-pill">
-                    {metric}
-                  </span>
+              <dl className="hero-stats hero-enter hero-enter-delay-2" aria-label="Key engineering highlights">
+                {STATS.map((s) => (
+                  <div key={s.label} className="stat">
+                    <dt className="stat-label">{s.label}</dt>
+                    <dd className="stat-value">
+                      <CountUp to={s.value} suffix={s.suffix} />
+                    </dd>
+                  </div>
                 ))}
-              </div>
+              </dl>
 
               <div className="hero-actions hero-enter hero-enter-delay-3">
                 <a href="#projects" className="btn btn-primary">
@@ -362,7 +344,7 @@ export function App() {
         <TechMarquee />
 
         {/* 01 // Featured Engineering */}
-        <section id="projects" className="section reveal">
+        <motion.section id="projects" className="section" {...REVEAL}>
           <div className="container">
             <div className="section-header">
               <div className="section-index">
@@ -422,10 +404,10 @@ export function App() {
               ))}
             </div>
           </div>
-        </section>
+        </motion.section>
 
         {/* 02 // AI-Native Workflow */}
-        <section id="ai-stack" className="section reveal">
+        <motion.section id="ai-stack" className="section" {...REVEAL}>
           <div className="container">
             <div className="section-header">
               <div className="section-index">
@@ -440,10 +422,10 @@ export function App() {
 
             <div className="bento-3">
               {AI_WORKFLOW.map((tool, index) => (
-                <article
+                <motion.article variants={ITEM} initial="hidden" whileInView="show" viewport={VIEWPORT}
                   key={tool.id}
                   className="card card-emerald spotlight-card ai-card stagger-item"
-                  style={{ '--stagger-index': index } as CSSProperties}
+                  custom={index}
                   onPointerMove={handleCardPointerMove}
                 >
                   <div className="ai-card-header">
@@ -461,14 +443,14 @@ export function App() {
                       </span>
                     ))}
                   </div>
-                </article>
+                </motion.article>
               ))}
             </div>
           </div>
-        </section>
+        </motion.section>
 
         {/* 03 // Interactive Resume */}
-        <section id="resume" className="section reveal">
+        <motion.section id="resume" className="section" {...REVEAL}>
           <div className="container">
             <div className="section-header">
               <div className="section-index">
@@ -490,12 +472,12 @@ export function App() {
 
               <div className="timeline">
                 {EXPERIENCE.map((item, index) => (
-                  <article
+                  <motion.article variants={ITEM} initial="hidden" whileInView="show" viewport={VIEWPORT}
                     key={item.id}
                     className={`card card-emerald spotlight-card timeline-card stagger-item ${
                       item.current ? 'is-current' : ''
                     }`}
-                    style={{ '--stagger-index': index } as CSSProperties}
+                    custom={index}
                     onPointerMove={handleCardPointerMove}
                   >
                     <p className="commit-line" aria-hidden="true">
@@ -534,7 +516,7 @@ export function App() {
                         </span>
                       ))}
                     </div>
-                  </article>
+                  </motion.article>
                 ))}
               </div>
             </div>
@@ -548,10 +530,10 @@ export function App() {
 
               <div className="bento-3">
                 {SKILL_CATEGORIES.map((group, index) => (
-                  <article
+                  <motion.article variants={ITEM} initial="hidden" whileInView="show" viewport={VIEWPORT}
                     key={group.label}
                     className="card card-emerald spotlight-card skill-card stagger-item"
-                    style={{ '--stagger-index': index } as CSSProperties}
+                    custom={index}
                     onPointerMove={handleCardPointerMove}
                   >
                     <h4 className="skill-card-title">{group.label}</h4>
@@ -562,13 +544,13 @@ export function App() {
                         </span>
                       ))}
                     </div>
-                  </article>
+                  </motion.article>
                 ))}
               </div>
             </div>
 
             {/* Education & Languages */}
-            <article
+            <motion.article variants={ITEM} initial="hidden" whileInView="show" viewport={VIEWPORT}
               className="card card-emerald spotlight-card education-card"
               onPointerMove={handleCardPointerMove}
             >
@@ -597,12 +579,12 @@ export function App() {
                   ))}
                 </div>
               </div>
-            </article>
+            </motion.article>
           </div>
-        </section>
+        </motion.section>
 
         {/* 04 // Beyond Code (Saxophonist Hobby / Passion) */}
-        <section id="passion" className="section reveal">
+        <motion.section id="passion" className="section" {...REVEAL}>
           <div className="container">
             <div className="section-header">
               <div className="section-index">
@@ -612,7 +594,7 @@ export function App() {
               <h2 className="section-title">Creative Outlet Outside Engineering</h2>
             </div>
 
-            <article
+            <motion.article variants={ITEM} initial="hidden" whileInView="show" viewport={VIEWPORT}
               className="card card-gold spotlight-card passion-card"
               onPointerMove={handleCardPointerMove}
             >
@@ -666,12 +648,12 @@ export function App() {
                   <span>Source</span>
                 </a>
               </div>
-            </article>
+            </motion.article>
           </div>
-        </section>
+        </motion.section>
 
         {/* 05 // Contact & Social Hub */}
-        <section id="contact" className="section reveal">
+        <motion.section id="contact" className="section" {...REVEAL}>
           <div className="container">
             <div className="section-header">
               <div className="section-index">
@@ -747,7 +729,7 @@ export function App() {
               </div>
             </div>
           </div>
-        </section>
+        </motion.section>
       </main>
 
       <footer className="site-footer">

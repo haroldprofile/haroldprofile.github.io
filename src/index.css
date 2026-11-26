@@ -1609,31 +1609,77 @@ button {
   font-size: 0.875rem;
 }
 
-/* Staggered Kinetic Section Reveals */
-.reveal {
-  opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 480ms var(--ease-kinetic), transform 480ms var(--ease-kinetic);
+/* Motion handles scroll reveals via whileInView; styles below cover Hero stats & SVG RequestFlow */
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0 0 26px;
 }
 
-.reveal.is-visible {
-  opacity: 1;
-  transform: translateY(0);
+.stat {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 2px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: rgba(30, 41, 59, 0.72);
 }
 
-.reveal .stagger-item {
-  opacity: 0;
-  transform: translateY(14px);
+.stat-value {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--accent-emerald);
 }
 
-.reveal.is-visible .stagger-item {
-  opacity: 1;
-  transform: translateY(0);
-  transition:
-    opacity 460ms var(--ease-kinetic) calc(var(--stagger-index, 0) * 65ms),
-    transform 460ms var(--ease-kinetic) calc(var(--stagger-index, 0) * 65ms),
-    border-color var(--transition-fast),
-    background-color var(--transition-fast);
+.stat-label {
+  font-size: 0.78125rem;
+  color: var(--text-secondary);
+}
+
+.flow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.flow-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.flow-node {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border-accent);
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+.flow-arrow {
+  width: 24px;
+  height: 12px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .hero-stats {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Responsive Breakpoints */
@@ -1733,12 +1779,6 @@ button {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     transition-delay: 0ms !important;
-  }
-
-  .reveal,
-  .reveal .stagger-item {
-    opacity: 1;
-    transform: none;
   }
 
   .marquee-track {

@@ -1,7 +1,10 @@
-import { useState, type CSSProperties } from 'react';
-import { CheckCircle2, ChevronDown, ChevronUp, Layers, Server } from 'lucide-react';
+import { useState } from 'react';
+import { motion } from 'motion/react';
+import { CheckCircle2, ChevronDown, ChevronUp, GitBranch, Layers, Server } from 'lucide-react';
 import type { EnterpriseSystemItem } from '../data/portfolio';
+import { ITEM, VIEWPORT } from '../motion';
 import { handleCardPointerMove } from '../utils/spotlight';
+import { RequestFlow } from './RequestFlow';
 
 interface EnterpriseSystemCardProps {
   system: EnterpriseSystemItem;
@@ -12,9 +15,13 @@ export function EnterpriseSystemCard({ system, staggerIndex = 0 }: EnterpriseSys
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <article
-      className="card card-emerald spotlight-card enterprise-card stagger-item"
-      style={{ '--stagger-index': staggerIndex } as CSSProperties}
+    <motion.article
+      className="card card-emerald spotlight-card enterprise-card"
+      variants={ITEM}
+      initial="hidden"
+      whileInView="show"
+      viewport={VIEWPORT}
+      custom={staggerIndex}
       onPointerMove={handleCardPointerMove}
     >
       <div className="enterprise-top">
@@ -68,6 +75,14 @@ export function EnterpriseSystemCard({ system, staggerIndex = 0 }: EnterpriseSys
         <div id={`arch-${system.id}`} className="architecture-drawer">
           <div className="arch-group">
             <h4 className="arch-heading">
+              <GitBranch size={14} aria-hidden="true" />
+              <span>Request Flow</span>
+            </h4>
+            <RequestFlow steps={system.flow} />
+          </div>
+
+          <div className="arch-group">
+            <h4 className="arch-heading">
               <Layers size={14} aria-hidden="true" />
               <span>Key Functional Modules</span>
             </h4>
@@ -91,6 +106,6 @@ export function EnterpriseSystemCard({ system, staggerIndex = 0 }: EnterpriseSys
           </div>
         </div>
       )}
-    </article>
+    </motion.article>
   );
 }

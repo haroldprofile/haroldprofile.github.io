@@ -31,6 +31,7 @@ export interface EnterpriseSystemItem {
   stack: string[];
   keyModules: string[];
   integrationsOps: string[];
+  flow: string[];
 }
 
 export interface AiToolItem {
@@ -91,6 +92,12 @@ export const PROFILE = {
     'Full Stack Developer experienced in end-to-end architecture, development, and Linux container deployment for production enterprise systems on .NET 8/10, React 19, TypeScript, and SQL Server — alongside privacy-first browser apps and AI-augmented engineering.',
   metrics: ['5 Enterprise Systems', '.NET 8/10 & React 19', 'Docker · Nginx · Azure VM'],
 } as const;
+
+export const STATS = [
+  { value: 5, suffix: '', label: 'Production Systems' },
+  { value: 35, suffix: '+', label: 'Browser-Local Tools' },
+  { value: 4, suffix: '+', label: 'Years Engineering' },
+] as const;
 
 export const NAV_ITEMS: NavItem[] = [
   { label: 'Projects', href: '#projects' },
@@ -192,6 +199,7 @@ export const ENTERPRISE_SYSTEMS: EnterpriseSystemItem[] = [
       'Scalar / OpenAPI interactive API docs & @microsoft/signalr live client sync',
       'Self-hosted Linux Azure VM deployment with Docker & ASP.NET SPA Proxy',
     ],
+    flow: ['React 19 SPA', 'MediatR CQRS', 'EF Core 10', 'SQL Server'],
   },
   {
     id: 'fdl',
@@ -230,6 +238,7 @@ export const ENTERPRISE_SYSTEMS: EnterpriseSystemItem[] = [
       'Scalar / OpenAPI endpoint documentation & ClosedXML report exports',
       'React Router DOM v7 + TanStack Query v5/Table v8 + Docker containerization',
     ],
+    flow: ['React 19 SPA', 'MediatR + Polly', 'EF Core 10', 'SQL Server'],
   },
   {
     id: 'qms',
@@ -268,6 +277,7 @@ export const ENTERPRISE_SYSTEMS: EnterpriseSystemItem[] = [
       'External Flask REST API integrated via RestSharp + Polly retry/circuit-breaker',
       'Docker Compose + Nginx reverse proxy on Linux with mounted upload/backup volumes',
     ],
+    flow: ['MVC Controller', 'EF Core + Dapper', 'SignalR / Flask', 'SQL Server'],
   },
   {
     id: 'rss',
@@ -306,6 +316,7 @@ export const ENTERPRISE_SYSTEMS: EnterpriseSystemItem[] = [
       'JWT module-level RBAC + ClosedXML Excel & iText7 PDF document generation',
       'jQuery, Bootstrap & DataTables UI deployed with Docker + Nginx',
     ],
+    flow: ['MVC Controller', 'JWT + Polly', 'NAV/TFCI ERP', 'SQL Server'],
   },
   {
     id: 'dtci',
@@ -341,6 +352,7 @@ export const ENTERPRISE_SYSTEMS: EnterpriseSystemItem[] = [
       'ASP.NET Identity role/group access control & ClosedXML Excel reporting',
       'Containerized ASP.NET Core 8 MVC deployment with Docker & Nginx',
     ],
+    flow: ['MVC + EN/FIL', 'Identity RBAC', 'EF Core 8', 'SQL Server'],
   },
 ];
 
